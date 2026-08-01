@@ -1,0 +1,41 @@
+# ----------------------------------------------------------------------
+# Ebenezer Junior School Nampunge — Apache config for shared hosting
+# Safe defaults: no URL rewriting, no .php removal (links stay portable).
+# ----------------------------------------------------------------------
+
+# Start with the PHP entry point
+DirectoryIndex index.php
+
+# Turn off directory listings for security
+Options -Indexes
+
+# ----------------------------------------------------------------------
+# Compression (Apache mod_deflate) — speed up asset delivery
+# ----------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Browser caching for static assets
+# ----------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png  "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType text/css   "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Basic security headers
+# ----------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
