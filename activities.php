@@ -11,8 +11,6 @@ $currentPage     = 'activities.php';
 include 'includes/header.php';
 
 $activities = [
-    ['icon' => 'swim',  'title' => 'Swimming',   'text' => 'Weekly lessons in our safe, supervised pool. Children gain water confidence, learn proper strokes and master vital water-safety skills — all while having enormous fun. Qualified instructors keep every session joyful and safe.'],
-    ['icon' => 'cpu',   'title' => 'ICT',        'text' => 'Our computer club turns curious kids into young digital creators. They learn typing, drawing, research, safe internet use and even the first steps of coding through fun, guided projects.'],
     ['icon' => 'trophy', 'title' => 'Sports',    'text' => 'Football, netball, athletics and team games build fitness, coordination and teamwork. Friendly inter-house and inter-school fixtures let every child feel the pride of playing for Ebenezer.'],
     ['icon' => 'music', 'title' => 'Music',      'text' => 'Singing, rhythm and movement bring joy to every week. Children perform at assemblies, graduations and community events, growing confidence with every note.'],
     ['icon' => 'smile', 'title' => 'Dance',      'text' => 'Traditional and modern dance celebrate our culture and let children express themselves freely. Dance builds poise, rhythm and wonderful stage confidence.'],

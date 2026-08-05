@@ -138,37 +138,7 @@
   $$('.counter').forEach(function (el) { counterObserver.observe(el); });
 
   /* ================================================ *
-   * 5. Hero slider
-   * ================================================ */
-  var heroSlides = $$('#heroSlides .hero-slide');
-  var heroDots   = $$('#heroDots button');
-  var heroIndex  = 0;
-  var heroTimer  = null;
-
-  function showSlide(i) {
-    if (!heroSlides.length) return;
-    heroIndex = (i + heroSlides.length) % heroSlides.length;
-    heroSlides.forEach(function (s, idx) {
-      s.classList.toggle('active', idx === heroIndex);
-    });
-    heroDots.forEach(function (d, idx) {
-      d.classList.toggle('active', idx === heroIndex);
-    });
-  }
-
-  function playHero() {
-    clearInterval(heroTimer);
-    heroTimer = setInterval(function () { showSlide(heroIndex + 1); }, 6000);
-  }
-
-  heroDots.forEach(function (dot, idx) {
-    dot.addEventListener('click', function () { showSlide(idx); playHero(); });
-  });
-
-  if (heroSlides.length > 1) playHero();
-
-  /* ================================================ *
-   * 6. Parallax (hero card + background layers)
+   * 5. Parallax (hero card + background layers)
    * ================================================ */
   var parallaxEls = $$('[data-parallax]');
 
@@ -266,27 +236,108 @@
   });
 
   /* ================================================ *
-   * 8. Testimonials slider
+   * 8. Testimonials carousel (infinite circular loop)
    * ================================================ */
-  var tSlides = $$('.t-slide');
-  var tPrev   = $('#tPrev');
-  var tNext   = $('#tNext');
-  var tIndex  = 0;
+  var tCarousel = $('[data-tcarousel]');
+  if (tCarousel) {
+    var tViewport = $('[data-tviewport]', tCarousel);
+    var tTrack    = $('[data-ttrack]', tCarousel);
+    var tPrev     = $('[data-tprev]', tCarousel);
+    var tNext     = $('[data-tnext]', tCarousel);
+    var tTimer    = null;
+    var touchX    = null;
 
-  function showTestimonial(i) {
-    if (!tSlides.length) return;
-    tIndex = (i + tSlides.length) % tSlides.length;
-    tSlides.forEach(function (s, idx) {
-      s.classList.toggle('active', idx === tIndex);
+    // Clone the slides once so the track can wrap around seamlessly
+    // (going off the last slide slides smoothly back onto the first).
+    $$('[data-tslide]', tCarousel).forEach(function (s) {
+      var clone = s.cloneNode(true);
+      clone.classList.remove('is-active');
+      clone.setAttribute('aria-hidden', 'true');
+      tTrack.appendChild(clone);
     });
-  }
+    var tSlides = $$('[data-tslide]', tCarousel);
+    var tCount  = tSlides.length / 2;
+    var tIndex  = 0; // position inside the doubled track
 
-  if (tPrev) tPrev.addEventListener('click', function () { showTestimonial(tIndex - 1); });
-  if (tNext) tNext.addEventListener('click', function () { showTestimonial(tIndex + 1); });
+    function tPosition() {
+      if (!tSlides.length) return;
+      var active = tSlides[tIndex];
+      var offset = active.offsetLeft + tTrack.offsetLeft - (tViewport.clientWidth - active.offsetWidth) / 2;
+      tTrack.style.transform = 'translateX(' + (-offset) + 'px)';
+      tSlides.forEach(function (s, i) {
+        s.classList.toggle('is-active', i === tIndex);
+        s.setAttribute('aria-hidden', i === tIndex ? 'false' : 'true');
+      });
+    }
 
-  // Auto-advance testimonials
-  if (tSlides.length > 1) {
-    setInterval(function () { showTestimonial(tIndex + 1); }, 9000);
+    // After a transition lands on a clone, instantly jump back to the
+    // matching real slide (content is identical, so it is invisible).
+    function tSnapBack() {
+      if (tIndex < tCount) return;
+      tTrack.classList.add('is-snapping');
+      tIndex -= tCount;
+      tPosition();
+      void tTrack.offsetWidth;
+      tTrack.classList.remove('is-snapping');
+    }
+
+    function tGoNext() {
+      tIndex = (tIndex + 1) % (tCount * 2);
+      tPosition();
+      tTrack.addEventListener('transitionend', function (e) {
+        if (e.target !== tTrack || e.propertyName !== 'transform') return;
+        tSnapBack();
+      }, { once: true });
+      setTimeout(tSnapBack, 700);
+    }
+
+    function tGoPrev() {
+      tIndex = (tIndex - 1 + tCount * 2) % (tCount * 2);
+      tPosition();
+      tTrack.addEventListener('transitionend', function (e) {
+        if (e.target !== tTrack || e.propertyName !== 'transform') return;
+        tSnapBack();
+      }, { once: true });
+      setTimeout(tSnapBack, 700);
+    }
+
+    function tPlay() {
+      tStop();
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      tTimer = setInterval(tGoNext, 5000);
+    }
+    function tStop() {
+      if (tTimer) { clearInterval(tTimer); tTimer = null; }
+    }
+
+    if (tPrev) tPrev.addEventListener('click', function () { tGoPrev(); tPlay(); });
+    if (tNext) tNext.addEventListener('click', function () { tGoNext(); tPlay(); });
+
+    tCarousel.addEventListener('mouseenter', tStop);
+    tCarousel.addEventListener('mouseleave', tPlay);
+    tCarousel.addEventListener('focusin', tStop);
+    tCarousel.addEventListener('focusout', tPlay);
+    tCarousel.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); tGoPrev(); tPlay(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); tGoNext(); tPlay(); }
+    });
+
+    tViewport.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; tStop(); }, { passive: true });
+    tViewport.addEventListener('touchend', function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) { (dx < 0 ? tGoNext : tGoPrev)(); tPlay(); }
+      touchX = null;
+    }, { passive: true });
+
+    var tResize;
+    window.addEventListener('resize', function () {
+      clearTimeout(tResize);
+      tResize = setTimeout(function () { tSnapBack(); tPosition(); }, 150);
+    });
+
+    tPosition();
+    tPlay();
   }
 
   /* ================================================ *

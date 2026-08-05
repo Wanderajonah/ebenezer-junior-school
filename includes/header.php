@@ -47,7 +47,8 @@ $canonical       = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . ($_SE
   <meta name="twitter:description" content="<?= htmlspecialchars($pageDescription) ?>">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 
   <!-- Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">

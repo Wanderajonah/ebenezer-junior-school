@@ -28,10 +28,10 @@
       <!-- Brand + newsletter -->
       <div class="footer-col">
         <a class="brand" href="index.php" aria-label="<?= htmlspecialchars(SCHOOL_NAME) ?> — Home">
-          <span class="brand-logo" aria-hidden="true"><?= svg_icon('graduation-cap', 30) ?></span>
+          <span class="brand-logo" aria-hidden="true"><img src="assets/images/logo.png" alt="<?= htmlspecialchars(SCHOOL_NAME) ?> logo"></span>
           <span class="brand-text">
-            <span class="name">Ebenezer Junior School</span>
-            <span class="tag">Nampunge &middot; Every Child Matters</span>
+            <span class="name">Ebenezer Junior</span>
+            <span class="name name--sub">School</span>
           </span>
         </a>
         <p class="about-txt">A caring, child-centred nursery and primary school on Hoima Road, Nampunge, nurturing confident learners through academic excellence, creativity and strong moral values.</p>
@@ -94,7 +94,7 @@
 
     <div class="footer-bottom">
       <p>&copy; <?= date('Y') ?> <?= htmlspecialchars(SCHOOL_NAME) ?>. All rights reserved.</p>
-      <p>Made with <span class="heart">&hearts;</span> for our children in Uganda</p>
+      <p>Made with <span class="heart">&hearts;</span></p>
     </div>
   </div>
 </footer>

@@ -104,7 +104,7 @@ $faqs = [
 
       <div class="split-media reveal">
         <div class="img-frame" style="aspect-ratio:4/3.2;">
-          <img src="assets/images/about-secondary.jpg" alt="Learning materials awaiting our new learners" loading="lazy" width="800" height="640">
+          <img src="assets/images/about-secondary.jpeg" alt="Learning materials awaiting our new learners" loading="lazy" width="800" height="640">
         </div>
         <div class="chips" style="margin-top:18px;">
           <span class="chip"><?= svg_icon('eye') ?> School Visits</span>

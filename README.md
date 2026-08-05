@@ -1,4 +1,4 @@
-# Ebenezer Junior School Nampunge — Official Website
+/# Ebenezer Junior School Nampunge — Official Website
 
 A modern, responsive, production-ready school website for **Ebenezer Junior School Nampunge** (Hoima Road, Nampunge, Wakiso, Uganda). The site is built entirely with hand-coded **PHP, HTML5, CSS3 and Vanilla JavaScript** — no frameworks, no libraries, no build tools.
 

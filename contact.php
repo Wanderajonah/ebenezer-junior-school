@@ -11,60 +11,26 @@ $currentPage     = 'contact.php';
 include 'includes/header.php';
 
 /* ---------------------------------------------------------
- * Form handling (server-side validation)
+ * Form handling
+ * ---------------------------------------------------------
+ * The enquiry form posts to FormSubmit.co (free email relay),
+ * because InfinityFree does not support PHP mail(). After a
+ * successful send, FormSubmit redirects back to contact.php?sent=1
+ * where we show the confirmation message below.
  * --------------------------------------------------------- */
-$errors   = [];
 $alert    = null;
 $alertType = '';
-$old = ['name' => '', 'email' => '', 'phone' => '', 'message' => ''];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $old['name']    = trim($_POST['name'] ?? '');
-    $old['email']   = trim($_POST['email'] ?? '');
-    $old['phone']   = trim($_POST['phone'] ?? '');
-    $old['message'] = trim($_POST['message'] ?? '');
-
-    // Validate
-    if ($old['name'] === '' || mb_strlen($old['name']) < 2) {
-        $errors['name'] = 'Please enter the parent / guardian name.';
-    }
-    if ($old['email'] === '' || !filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Please enter a valid email address.';
-    }
-    if ($old['phone'] !== '' && !preg_match('/^[0-9+\-\s]{9,15}$/', $old['phone'])) {
-        $errors['phone'] = 'Please enter a valid phone number.';
-    }
-    if ($old['message'] === '' || mb_strlen($old['message']) < 10) {
-        $errors['message'] = 'Please write a message of at least 10 characters.';
-    }
-
-    if (empty($errors)) {
-        // Attempt to save to the database when enabled (optional future upgrade)
-        $db = getDB();
-        if ($db !== null) {
-            try {
-                $stmt = $db->prepare('INSERT INTO enquiries (name, email, phone, message, created_at) VALUES (?, ?, ?, ?, NOW())');
-                $stmt->execute([$old['name'], $old['email'], $old['phone'], $old['message']]);
-            } catch (PDOException $e) {
-                error_log('Enquiry insert failed: ' . $e->getMessage());
-            }
-        }
-
-        // Attempt to email the school
-        $subject = 'New website enquiry from ' . $old['name'];
-        $body    = "Name: {$old['name']}\nEmail: {$old['email']}\nPhone: {$old['phone']}\n\nMessage:\n{$old['message']}\n";
-        $headers = 'From: ' . SCHOOL_EMAIL . "\r\n" . 'Reply-To: ' . $old['email'];
-        $sent    = @mail(SCHOOL_EMAIL, $subject, $body, $headers);
-
-        $alertType = 'success';
-        $alert = 'Thank you, ' . htmlspecialchars($old['name']) . '! Your message has been received. Our team will contact you shortly.';
-        $old = ['name' => '', 'email' => '', 'phone' => '', 'message' => ''];
-        unset($sent);
-    } else {
-        $alertType = 'error';
-        $alert = 'Please fix the highlighted fields below and try again.';
-    }
+if (isset($_GET['sent'])) {
+    $alertType = 'success';
+    $alert = 'Thank you! Your message has been received. Our team will contact you shortly.';
 }
+
+$formSubmitUrl  = 'https://formsubmit.co/' . urlencode(SCHOOL_EMAIL);
+$formNextUrl    = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http')
+    . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost')
+    . rtrim(str_replace(basename($_SERVER['SCRIPT_NAME'] ?? 'contact.php'), '', $_SERVER['SCRIPT_NAME'] ?? ''), '/')
+    . '/contact.php?sent=1';
 ?>
 
 <main id="main">
@@ -140,30 +106,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-alert <?= htmlspecialchars($alertType) ?>" role="alert"><?= htmlspecialchars($alert) ?></div>
           <?php endif; ?>
 
-          <form id="contactForm" action="contact.php" method="post" novalidate>
+          <form id="contactForm" action="<?= htmlspecialchars($formSubmitUrl) ?>" method="POST" novalidate>
+            <input type="hidden" name="_subject" value="New website enquiry from the contact page">
+            <input type="hidden" name="_template" value="box">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="<?= htmlspecialchars($formNextUrl) ?>">
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
             <div class="form-grid">
-              <div class="field <?= isset($errors['name']) ? 'error' : '' ?>">
+              <div class="field">
                 <label for="name">Your Name <span>*</span></label>
-                <input type="text" id="name" name="name" value="<?= htmlspecialchars($old['name']) ?>" placeholder="e.g. Sarah Nakato" required autocomplete="name">
-                <small class="error-msg"><?= $errors['name'] ?? '' ?></small>
+                <input type="text" id="name" name="name" placeholder="e.g. Sarah Nakato" required autocomplete="name">
+                <small class="error-msg"></small>
               </div>
 
-              <div class="field <?= isset($errors['phone']) ? 'error' : '' ?>">
+              <div class="field">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($old['phone']) ?>" placeholder="e.g. 0782 011079" autocomplete="tel">
-                <small class="error-msg"><?= $errors['phone'] ?? '' ?></small>
+                <input type="tel" id="phone" name="phone" placeholder="e.g. 0782 011079" autocomplete="tel">
+                <small class="error-msg"></small>
               </div>
 
-              <div class="field field--full <?= isset($errors['email']) ? 'error' : '' ?>">
+              <div class="field field--full">
                 <label for="email">Email Address <span>*</span></label>
-                <input type="email" id="email" name="email" value="<?= htmlspecialchars($old['email']) ?>" placeholder="e.g. parent@example.com" required autocomplete="email">
-                <small class="error-msg"><?= $errors['email'] ?? '' ?></small>
+                <input type="email" id="email" name="email" placeholder="e.g. parent@example.com" required autocomplete="email">
+                <small class="error-msg"></small>
               </div>
 
-              <div class="field field--full <?= isset($errors['message']) ? 'error' : '' ?>">
+              <div class="field field--full">
                 <label for="message">Your Message <span>*</span></label>
-                <textarea id="message" name="message" placeholder="Tell us about your enquiry — admissions, school visit, fees…" required><?= htmlspecialchars($old['message']) ?></textarea>
-                <small class="error-msg"><?= $errors['message'] ?? '' ?></small>
+                <textarea id="message" name="message" placeholder="Tell us about your enquiry — admissions, school visit, fees…" required></textarea>
+                <small class="error-msg"></small>
               </div>
 
               <div class="field field--full">

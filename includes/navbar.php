@@ -49,26 +49,28 @@ $childSlugToFile = function (string $slug): string {
           <?= svg_icon('mail') ?>
           <a href="mailto:<?= htmlspecialchars(SCHOOL_EMAIL) ?>"><?= htmlspecialchars(SCHOOL_EMAIL) ?></a>
         </li>
-        <li>
-          <?= svg_icon('map-pin') ?>
-          <span><?= htmlspecialchars(SCHOOL_ADDRESS_2 . ', ' . SCHOOL_ADDRESS_3) ?></span>
-        </li>
       </ul>
-      <div class="topbar-social">
-        <a href="<?= htmlspecialchars(SOCIAL_FACEBOOK) ?>" aria-label="Facebook" title="Facebook"><?= svg_icon('facebook', 13) ?></a>
-        <a href="<?= htmlspecialchars(SOCIAL_INSTAGRAM) ?>" aria-label="Instagram" title="Instagram"><?= svg_icon('instagram', 13) ?></a>
-        <a href="<?= htmlspecialchars(SOCIAL_TWITTER) ?>" aria-label="X (Twitter)" title="X (Twitter)"><?= svg_icon('twitter', 13) ?></a>
-        <a href="<?= htmlspecialchars(SOCIAL_WHATSAPP) ?>" aria-label="WhatsApp" title="WhatsApp"><?= svg_icon('whatsapp', 13) ?></a>
+      <div class="topbar-right">
+        <div class="topbar-social">
+          <a href="<?= htmlspecialchars(SOCIAL_FACEBOOK) ?>" aria-label="Facebook" title="Facebook"><?= svg_icon('facebook', 14) ?></a>
+          <a href="<?= htmlspecialchars(SOCIAL_INSTAGRAM) ?>" aria-label="Instagram" title="Instagram"><?= svg_icon('instagram', 14) ?></a>
+          <a href="<?= htmlspecialchars(SOCIAL_TWITTER) ?>" aria-label="X (Twitter)" title="X (Twitter)"><?= svg_icon('twitter', 14) ?></a>
+          <a href="<?= htmlspecialchars(SOCIAL_WHATSAPP) ?>" aria-label="WhatsApp" title="WhatsApp"><?= svg_icon('whatsapp', 14) ?></a>
+        </div>
+        <span class="topbar-divider" aria-hidden="true"></span>
+        <a class="topbar-cta" href="admissions.php">
+          Admissions Open <?= svg_icon('arrow-right', 13) ?>
+        </a>
       </div>
     </div>
   </div>
 
   <div class="container navbar-inner">
     <a class="brand" href="index.php" aria-label="<?= htmlspecialchars(SCHOOL_NAME) ?> — Home">
-      <span class="brand-logo" aria-hidden="true"><?= svg_icon('graduation-cap', 30) ?></span>
+      <span class="brand-logo" aria-hidden="true"><img src="assets/images/logo.png" alt="<?= htmlspecialchars(SCHOOL_NAME) ?> logo"></span>
       <span class="brand-text">
-        <span class="name">Ebenezer Junior School</span>
-        <span class="tag">Nampunge &middot; Every Child Matters</span>
+        <span class="name">Ebenezer Junior</span>
+        <span class="name name--sub">School</span>
       </span>
     </a>
 
