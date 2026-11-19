@@ -52,15 +52,22 @@ export default function CurriculumMarquee() {
       band.style.height = `${vh - headerH}px`;
 
       const pinRange = rect.height - vh + headerH;
-      const progress = pinRange > 0 ? Math.min(1, Math.max(0, (headerH - rect.top) / pinRange)) : 0;
+      const raw = pinRange > 0 ? Math.min(1, Math.max(0, (headerH - rect.top) / pinRange)) : 0;
+      // Hold briefly at the start so the first words ("Thinkers" / "Curious")
+      // are seen before the rows begin to move.
+      const HOLD = 0.06;
+      const progress = raw <= HOLD ? 0 : (raw - HOLD) / (1 - HOLD);
 
       const trackA = trackARef.current;
       const trackB = trackBRef.current;
       if (trackA && trackB) {
-        const copyWidth = trackA.scrollWidth / COPIES;
-        const distance = Math.min(copyWidth * 0.6, vh * 0.9);
+        const copyB = trackB.scrollWidth / COPIES;
+        const distance = vh * 0.4;
+        // Start row 2 one full copy to the left so its first word is visible
+        // at the start, then it slides right (opposite to row 1).
+        const offset = copyB > 0 ? copyB : vh * 4;
         trackA.style.transform = `translateX(${-progress * distance}px)`;
-        trackB.style.transform = `translateX(${-distance + progress * distance}px)`;
+        trackB.style.transform = `translateX(${-offset + progress * distance}px)`;
       }
     };
 
@@ -98,7 +105,7 @@ export default function CurriculumMarquee() {
           </p>
         </div>
 
-        <div className="marquee" aria-hidden="true">
+        <div className="marquee marquee--first" aria-hidden="true">
           <div className="marquee__clip">
             <div className="marquee__track" ref={trackARef}>
               {row(TRAITS_A).map((word, i) => (

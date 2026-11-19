@@ -3164,7 +3164,7 @@ body.lightbox-locked { overflow: hidden; }
 .curriculum-section { background: #16317a; }
 .curriculum-marquee-wrap {
   position: relative;
-  height: 300vh;
+  height: 180vh;
 }
 .curriculum-marquee {
   position: absolute;
@@ -3214,10 +3214,11 @@ body.lightbox-locked { overflow: hidden; }
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding-left: 5%;
+  padding-right: 5%;
+  border-bottom: 1px solid #ffffff;
 }
-.marquee--reverse {
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+.marquee--first {
+  border-top: 1px solid #ffffff;
 }
 .marquee__clip {
   flex: 1 1 auto;
