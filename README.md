@@ -142,7 +142,7 @@ Chrome, Firefox, Safari, Edge — current two versions. Built with CSS3 features
 ## Design notes
 
 - **Palette:** `#16317A` royal blue · `#33A9E0` sky blue · `#E8B04B` warm gold · `#F2F7FD` card blue · `#243043` text
-- **Typography:** Playfair Display (headings) + Plus Jakarta Sans (body) via Google Fonts
+- **Typography:** Fraunces (headings) + DM Sans (body) via Google Fonts
 - The design is **original** — inspired by the premium feel of top international school sites, not copied from any of them.
 
 ---
