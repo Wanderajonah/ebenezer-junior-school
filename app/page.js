@@ -263,6 +263,33 @@ export default function HomePage() {
         )}
       </section>
 
+      {/* ======================= RESULTS / DESTINATIONS ======================= */}
+      <section className="destinations" id="results">
+        <div className="destinations__copy reveal">
+          <h2>Our pupils move on to the best secondary schools</h2>
+          <p>
+            Each year, our P7 candidates sit the Primary Leaving Examinations and earn places at the
+            secondary schools of their choice — a reflection of their hard work, our strong foundations
+            and teachers who never give up on a child.
+          </p>
+          <Link className="destinations__btn" href="/about">
+            See Our Results
+          </Link>
+        </div>
+        <div className="destinations__media">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/images/african-kids-classroom.jpg"
+            alt="Ebenezer Junior pupils learning together in class"
+            loading="lazy"
+          />
+          <div className="destinations__stat">
+            <span className="destinations__num">98%</span>
+            <p>of our P7 candidates progress to the secondary school of their choice.</p>
+          </div>
+        </div>
+      </section>
+
       {/* ======================= WHY CHOOSE US ======================= */}
       <section className="section why-section" id="why-us">
         <div className="container">

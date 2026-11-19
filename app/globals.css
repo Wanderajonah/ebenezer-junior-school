@@ -3162,16 +3162,9 @@ body.lightbox-locked { overflow: hidden; }
    37. Curriculum marquee — scrolling learner traits
    -------------------------------------------------------------------------- */
 .curriculum-section { background: #16317a; }
-.curriculum-marquee-wrap {
-  position: relative;
-  height: 180vh;
-}
 .curriculum-marquee {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: calc(100vh - var(--header-h));
+  position: relative;
+  min-height: 120vh;
   display: flex;
   flex-direction: column;
   gap: clamp(14px, 3vh, 28px);
@@ -3180,41 +3173,62 @@ body.lightbox-locked { overflow: hidden; }
   color: #fff;
   background: #16317a;
 }
-.curriculum-marquee .eyebrow { color: var(--gold); margin-bottom: 10px; }
-.curriculum-marquee .eyebrow::before { background: var(--gold); }
 .curriculum-marquee__head {
   flex: none;
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  gap: clamp(24px, 5vw, 56px);
-  align-items: end;
-  padding-block: clamp(14px, 4vh, 36px) 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+  padding-block: 10vh 10vh;
+}
+.curriculum-marquee__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(20px, 3vh, 36px);
 }
 .curriculum-marquee__title {
-  margin: 0 0 clamp(10px, 2.2vh, 24px);
+  margin: 0;
   color: #fff;
-  font-size: clamp(1.6rem, min(4.4vh, 3.8vw), 2.9rem);
-  line-height: 1.08;
+  font-size: clamp(2.4rem, 7vh, 5rem);
+  line-height: 1.04;
   letter-spacing: -0.01em;
   text-transform: uppercase;
   font-weight: 800;
   text-wrap: balance;
 }
-.curriculum-marquee__title-light { display: block; font-weight: 500; }
-.curriculum-marquee__lead {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: clamp(0.85rem, 1.7vh, 0.94rem);
-  line-height: 1.55;
-  max-width: 46ch;
+.curriculum-marquee__title-strong { display: block; font-weight: 800; }
+.curriculum-marquee__title-light { display: block; font-weight: 300; }
+.curriculum-marquee__copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.4vh, 24px);
+  max-width: 560px;
 }
+.curriculum-marquee__copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(1rem, 2.2vh, 1.15rem);
+  line-height: 1.6;
+}
+.curriculum-marquee__btn {
+  background: #f2f0f7;
+  color: var(--royal-deep);
+  border: 0;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: clamp(0.66rem, 1.2vh, 0.78rem);
+  font-weight: 700;
+  padding: clamp(12px, 2vh, 18px) clamp(16px, 2.4vw, 24px);
+}
+.curriculum-marquee__btn:hover { background: #ffffff; color: var(--royal-deep); }
 
 .marquee {
   flex: 1;
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding-right: 5%;
   border-bottom: 1px solid #ffffff;
 }
 .marquee--first {
@@ -3234,12 +3248,13 @@ body.lightbox-locked { overflow: hidden; }
   display: block;
   padding-right: clamp(2rem, 5vw, 5rem);
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(2.5rem, 18vh, 12rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 15vh, 11rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
   text-transform: uppercase;
   white-space: nowrap;
+  -webkit-text-stroke: 0.014em currentColor;
 }
 .marquee__word--white { color: #fff; }
 .marquee__word--gold { color: var(--gold); }
@@ -3250,7 +3265,108 @@ body.lightbox-locked { overflow: hidden; }
     grid-template-columns: 1fr;
     gap: 16px;
     align-items: start;
-    padding-bottom: 18px;
   }
 }
 
+@media (max-width: 480px) {
+  .marquee__word {
+    font-size: clamp(2rem, 12vh, 4.5rem);
+    letter-spacing: -0.03em;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   38. Results / destinations — copy panel + image with stat card
+   -------------------------------------------------------------------------- */
+.destinations {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  background: var(--royal);
+  color: #fff;
+}
+.destinations__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(18px, 2.6vh, 30px);
+  padding: clamp(48px, 9vh, 110px) clamp(24px, 6vw, 96px);
+}
+.destinations__copy h2 {
+  margin: 0;
+  max-width: 15ch;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, min(4.6vw, 7.4vh), 4.4rem);
+  font-weight: 400;
+  line-height: 1.03;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.destinations__copy p {
+  margin: 0;
+  max-width: 42ch;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+  line-height: 1.65;
+}
+.destinations__btn {
+  display: inline-flex;
+  align-items: center;
+  background: #f2f0f7;
+  color: var(--royal-deep);
+  font-family: var(--font-display);
+  font-size: clamp(0.66rem, 1.2vh, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: clamp(12px, 2vh, 18px) clamp(18px, 2.4vw, 26px);
+  transition: background 0.2s ease;
+}
+.destinations__btn:hover { background: #ffffff; color: var(--royal-deep); }
+.destinations__media {
+  position: relative;
+  min-height: clamp(380px, 62vh, 720px);
+}
+.destinations__media img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.destinations__stat {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(78%, 420px);
+  background: var(--gold);
+  color: var(--royal-deep);
+  padding: clamp(22px, 4vh, 44px) clamp(20px, 3vw, 40px);
+}
+.destinations__num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 6vh, 4.6rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.destinations__stat p {
+  margin: clamp(10px, 1.6vh, 18px) 0 0;
+  font-size: clamp(0.9rem, 1.5vh, 1.05rem);
+  line-height: 1.5;
+}
+
+@media (max-width: 991px) {
+  .destinations { grid-template-columns: 1fr; }
+  .destinations__copy { padding: clamp(40px, 8vh, 72px) var(--page-gutter); }
+  .destinations__media { min-height: clamp(300px, 52vh, 520px); }
+}
+
+@media (max-width: 480px) {
+  .destinations__stat { width: 82%; padding: 20px; }
+}
